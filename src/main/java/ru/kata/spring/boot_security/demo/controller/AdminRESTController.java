@@ -15,8 +15,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class AdminRESTController {
 
-    private UserServiceImpl userService;
-    private RoleServiceImpl roleService;
+    private final UserServiceImpl userService;
+    private final RoleServiceImpl roleService;
 
     @Autowired
     public AdminRESTController(UserServiceImpl userService, RoleServiceImpl roleService) {
@@ -28,14 +28,6 @@ public class AdminRESTController {
         List<User> users = userService.getListUsers();
         return users != null && !users.isEmpty()
                 ? new ResponseEntity<>(users, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/users/{id}")
-    public ResponseEntity<User> showUser(@PathVariable Long id) {
-        User user = userService.getById(id);
-        return user != null
-                ? new ResponseEntity<>(user, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
@@ -57,18 +49,10 @@ public class AdminRESTController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/viewUser")
-    public ResponseEntity<User> showUser(Authentication auth) {
-        return new ResponseEntity<>((User) auth.getPrincipal(), HttpStatus.OK);
-    }
-
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getAllRoles() {
         return new ResponseEntity<>(userService.getListRoles(), HttpStatus.OK);
     }
 
-    @GetMapping("/roles/{id}")
-    ResponseEntity<Role> getRoleById(@PathVariable("id") long id){
-        return new ResponseEntity<>(roleService.getRoleById(id), HttpStatus.OK);
-    }
+
 }

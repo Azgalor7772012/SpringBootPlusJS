@@ -23,16 +23,14 @@ public class UserServiceImpl implements UserService {
 
     private final RoleDaoImpl roleDao;
     private final UserDaoImpl userDao;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
-    public PasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-    @Autowired
-    public UserServiceImpl(RoleDaoImpl roleDao, UserDaoImpl userDao) {
+    public UserServiceImpl(RoleDaoImpl roleDao, UserDaoImpl userDao, PasswordEncoder passwordEncoder) {
         this.roleDao = roleDao;
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -46,7 +44,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void add(User user) {
-        user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         userDao.add(user);
     }
 
@@ -68,7 +66,7 @@ public class UserServiceImpl implements UserService {
         if (oldUser.getPassword().equals(user.getPassword()) || "".equals(user.getPassword())) {
             user.setPassword(oldUser.getPassword());
         } else {
-            user.setPassword(bCryptPasswordEncoder().encode(user.getPassword()));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
         }
         userDao.update(user);
     }
