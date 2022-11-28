@@ -51,9 +51,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-    public String encodePassword(String password) {
-        PasswordEncoder encoder = getPasswordEncoder();
-        return encoder.encode(password);
-    }
 }
